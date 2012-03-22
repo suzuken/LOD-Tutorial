@@ -1,0 +1,300 @@
+# Linked Data チュートリアル
+
+この資料ではLinked Dataについての様々なツールや方法論を紹介し、実際にLinked Dataを構築するための手順について説明していきます。
+
+## Linked Dataを構成する要素
+
+Linked Dataは分散されたデータをWebによってつなげることによって実現されるもの、またはその活動のことを指します。Webが普及してから、様々な機関や企業がデータを蓄積し、システムに活かしてきました。各ドメインにあるデータは、外部のデータと連携することでより良いものを生み出す可能性があります。色々な団体がデータをオープンにすることによってWebをより便利なものにしていこうという理念のもと進められているのが、Linked Dataの活動です。
+
+各団体が保有しているデータを公開する手段はいくつかあります。
+
+> ### Linked Data 5 Stars
+>
+>1. Available on the web (whatever format) but with an open licence, to be Open Data
+>2. Available as machine-readable structured data (e.g. excel instead of image scan of a table)
+>3. as (2) plus non-proprietary format (e.g. CSV instead of excel)
+>4. All the above plus, Use open standards from W3C (RDF and SPARQL) to identify things, so that people can point at your stuff
+>5. All the above, plus: Link your data to other people’s data to provide context
+>
+>* Linked Data - Design Issues
+>   * http://www.w3.org/DesignIssues/LinkedData.html
+
+機械可読であり、W3C標準の技術を利用してデータを公開することを進めています。また、自分の公開したデータを外部で作成されたデータと関連付けることでより役に立たせることができます。
+
+Web上でデータを提供する方法としてはWebAPIによる公開が一般的なのではないか、と考えられる方も多いでしょう。Linked Dataではデータそのものを参照できるようにするため、WebAPI用のエンドポイントを実装する必要がなくなります。WebAPIのための認証機構や設計をするコストを割くことができない場合もあるでしょう。Linked Dataでは構造化されたデータを参照可能にすることで、グローバルなWebの空間で利用されることを期待しているため、W3Cで標準化されている方法でデータの公開ができてしまえばあとは余分な設計をする必要はありません。外部の開発者がデータを使いやすい形で提供するためのインフラとしての役割こそが、Linked Dataが期待されている点であると言えるでしょう。
+
+ではLinked Dataであるためにはどのようなことを守れば良いのでしょうか。Linked Dataであるための4原則は以下のとおりです。
+
+> 1. Use URIs as names for things.
+> 2. Use HTTP URIs so that people can look up those names.
+> 3. When someone looks up a URI, provide useful information, using the standards (RDF*, SPARQL)
+> 4. Include links to other URIs. so that they can discover more things.
+>
+>* Linked Data - Design Issues
+>   * http://www.w3.org/DesignIssues/LinkedData.html
+
+全ての物事にURIによる名前をつけ、URIは人間が読んでも理解可能であるようにし、URIを参照した際に有用な情報が提供されるようにし、より多くの情報が見つかるように他のURIへのリンクを含むことであると述べられています。この原則を守ることにより、データ同士の連携が深まっていくことになります。
+
+Linked Dataに関する一般的な情報は以下のサイトが参考になります。
+
+* Linked Data | Linked Data - Connect Distributed Data across the Web
+    * http://linkeddata.org/
+
+## Linked Data作成チュートリアル ~ 1. TDBの利用 ~
+
+では実際にLinked Dataを作成して行きましょう。今回は軽量なRDFデータストアであるTDBを利用することにします。
+
+### 実習環境について
+
+今回の実習では全ての操作をコマンドラインから行います。Windowsユーザの方はCygwinを利用するか、VMでBashの使えるOSを用意してください。Mac / Linuxユーザの方はデフォルトのコンソールを利用すれば大丈夫です。
+
+* Cygwinのインストール
+    * http://cygwin.com/install.html
+
+### TDBのインストール
+
+#### Windowsの場合
+
+まずはTDBをダウンロードしましょう。TDBはApache Incubatingプロジェクトの一部として提供されています。
+
+* Index of /content/repositories/releases/org/apache/jena/jena-tdb/0.9.0-incubating/
+    * https://repository.apache.org/content/repositories/releases/org/apache/jena/jena-tdb/0.9.0-incubating/
+
+jena-tdb-0.9.0-incubating-distribution.zipをダウンロードして解凍しましょう。
+
+#### Linux / Mac / Cygwinの場合
+
+    $ cd /path/to/your/working/directory
+    $ wget https://repository.apache.org/content/repositories/releases/org/apache/jena/jena-tdb/0.9.0-incubating/jena-tdb-0.9.0-incubating-distribution.zip
+    $ unzip jena-tdb-0.9.0-incubating-distribution.zip
+    $ cd jena-tdb-0.9.0-incubating
+
+/usr/local/lib/jena にjenaプロジェクトのシンボリックリンクを作成してもよいでしょう。
+
+    $ cd /usr/local/lib
+    $ ln -s /path/to/jena-tdb-0.9.0-incubating jena
+
+### コマンドラインからのTDBの利用
+
+* Apache Jena - TDB Command-line Utilities
+    * http://incubator.apache.org/jena/documentation/tdb/commands.html
+
+簡単のため、Pathを通しておきましょう。
+
+    $ TDBROOT=/path/to/jena-tdb-0.9.0-incubating
+    $ PATH=$TDBROOT/bin:$PATH
+
+ではさっそく利用してみます。tdbコマンドを実行しましょう。
+
+    $ tdb
+    Usage: /usr/local/lib/jena/bin/tdb classname [args ...]
+
+クラスを指定するように言われます。Pathは正常に通っているようです。
+
+実際にデータベースを作成してみましょう。作業用のディレクトリに移動し、tdbtestディレクトリを作成します。
+
+    $ cd /path/to/your/working/directory
+    $ mkdir tdbtest
+    $ ls
+    tdbtest
+
+サンプルのRDFを用意しました。test.rdfという名前で保存し、読み込んでみます。
+
+    $ cat test.rdf
+    <?xml version="1.0"?>
+
+    <rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:test="http://www.keio.ac.jp/test/">
+
+    <rdf:Description rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/">
+      <test:title>Yamaguchi Laboratory, Keio University</test:title>
+      <test:author>Yamaguchi Laboratory</test:author>
+    </rdf:Description>
+
+    </rdf:RDF>
+
+    $ tdbloader --loc=tdbtest test.rdf
+    -- Start triples data phase
+    ** Load empty triples table
+    Load: test.rdf -- 2012/03/22 20:32:21 JST
+    -- Finish triples data phase
+    2 triples loaded in 0.17 seconds [Rate: 11.98 per second]
+    -- Start triples index phase
+    ** Index SPO->POS: 2 slots indexed
+    ** Index SPO->OSP: 2 slots indexed
+    -- Finish triples index phase
+    ** 2 triples indexed in 0.00 seconds [Rate: 2,000.00 per second]
+    -- Finish triples load
+    ** Completed: 2 triples loaded in 0.18 seconds [Rate: 10.93 per second]
+
+これにより、tdbtestディレクトリにRDFが読み込まれました。しかし、ただRDFが読み込まれだわけではなく、RDFストアが作成されています。
+
+    $ ls tdbtest
+    GOSP.dat      GPOS.idn      OSP.dat       OSPG.idn      POSG.dat      SPO.idn       journal.jrnl  nodes.dat     prefixIdx.dat
+    GOSP.idn      GSPO.dat      OSP.idn       POS.dat       POSG.idn      SPOG.dat      node2id.dat   prefix2id.dat prefixIdx.idn
+    GPOS.dat      GSPO.idn      OSPG.dat      POS.idn       SPO.dat       SPOG.idn      node2id.idn   prefix2id.idn prefixes.dat
+
+では先程読み込んだtest.rdfに関する情報を取り出してみましょう。
+
+    $ tdbquery --loc=tdbtest "SELECT ?website WHERE {?website <http://www.keio.ac.jp/test/title> 'hoge'}"
+    -----------
+    | website |
+    ===========
+    -----------
+
+タイトルがhogeのWebサイトを取得しようとしましたが取得できませんでした。挿入したtest.rdfにはタイトルをYamaguchi Laboratory, Keio Universityと設定していました。もう一度クエリを投げてみましょう。
+
+    $ tdbquery --loc=tdbtest "SELECT ?website WHERE {?website <http://www.keio.ac.jp/test/title> 'Yamaguchi Laboratory, Keio University'}"
+    ---------------------------------------------
+    | website                                   |
+    =============================================
+    | <http://www.yamaguti.comp.ae.keio.ac.jp/> |
+    ---------------------------------------------
+
+予想通りクエリが実行され、Webサイトのインスタンスを取得することが出来ました。<http://www.yamaguti.comp.ae.keio.ac.jp/>というのはWebサイトのURIです。
+
+挿入した全てのデータを表示するにはtdbdumpを利用します。
+
+    $ tdbdump --loc=tdbtest
+    <http://www.yamaguti.comp.ae.keio.ac.jp/> <http://www.keio.ac.jp/test/title> "Yamaguchi Laboratory, Keio University" .
+    <http://www.yamaguti.comp.ae.keio.ac.jp/> <http://www.keio.ac.jp/test/author> "Yamaguchi Laboratory" .
+
+これでひと通りのtdbの挙動をつかむことができたと思います。
+
+### このチュートリアルでまだやっていないこと
+
+* SPARQLファイルを個別に書いてqueryを実行する
+* TDBにいれたデータをSPARQLエンドポイントとして公開する
+* データの更新。updateクエリ。
+* 挿入したデータの削除
+
+### 参考にした資料
+
+* Configuring Joseki + Pellet + TDB - Semantic Portal Wiki
+    * http://tw.rpi.edu/portal/Configuring_Joseki_%2B_Pellet_%2B_TDB
+
+## Linked Data作成チュートリアル ~ 2. SPARQLを効果的に利用する ~
+
+1つ目のチュートリアルではTDBの導入と、簡単なデータの挿入を試しました。では、より実践に近い形でTDBを利用していきましょう。
+
+
+
+
+
+## 演習問題
+
+各自で好きなドメインのデータをデザインし、TDBに格納してください。
+
+結果の生成は以下のようにしましょう。
+
+    $ tdbdump --loc=tdbtest >> yourname.wi.n3
+    $ tdbstat --loc=tdbtest >> yourname.wi.tdbstats
+    (yournameにはあなたの名前を入れてください。)
+
+生成された２つのファイルを添付し、提出してください。提出の際には、下記についても併記してください。
+
+* 名前
+* 学年
+* 学籍番号
+* どのようなデータを作成したか
+
+提出方法については授業内で説明します。
+
+## Linked Data関連ツール
+
+Linked Dataを構築するためのツールが開発されています。ここではそれらのツール類について紹介します。
+
+### RDFライブラリ
+
+* Redland RDF Libraries
+    * http://librdf.org/
+
+Cで書かれた汎用RDFライブラリ。非常に高速なパーサとシリアライザーが実装されています。また、Lua (experimental),Perl,PHP,Python,Rubyへのバインディングも実装されています。（実装の一覧: Redland librdf Language Bindings | http://librdf.org/bindings/ ）
+
+* Jena Semantic Web Framework
+    * http://jena.sourceforge.net/
+
+Javaで書かれたRDFライブラリ。フレームワークというだけあって、データベースとの連携やSPARQLなどもサポートされています。
+
+* rdflib
+    * http://www.rdflib.net/
+
+Python用のRDFライブラリ。基本的なグラフ操作，SPARQL等もサポートされています。
+
+* RDF.rb: Linked Data for Ruby
+    * http://rdf.rubyforge.org/
+
+Ruby製のRDFライブラリ。rubygemsから利用できるので便利です。
+
+* HackageDB: swish
+    * http://hackage.haskell.org/package/swish
+
+SwishはHaskellで書かれたRDFデータを利用するためのライブラリです。
+
+* rdfquery - RDF processing in your browser - Google Project Hosting
+    * http://code.google.com/p/rdfquery/
+
+JavaScriptのためのRDFプロセッサです。RDFの生成及び読み込みが可能です。要jQuery。
+
+### RDFバリデータ
+
+RDFが正しい形式かどうかを検証するW3Cが提供しているツールがあります。各自でRDFを生成した場合には、ここで一度検証すると良いです。
+
+* W3C RDF Validation Service
+    * http://www.w3.org/RDF/Validator/
+
+RDFの体裁を検証するツールです。W3Cから提供されています。
+
+
+* RDF Test Cases
+    * http://www.w3.org/TR/rdf-testcases/
+
+検証機ではありませんが、RDFのテストケースというものも用意されています。これは、新しいRDFライブラリを開発する場合などに利用されるRDFのテストです。つまりこれらのRDFを正常に解釈できれば、動作の正確性を検証できます。
+
+### RDFストア
+
+RDFを格納するためのストレージです。RDFストアも関係データベースなどと同じように、それぞれ特徴が異なります。特徴とあわせて以下にRDFストアを紹介します。
+
+* 4store - Scalable RDF storage
+    * http://4store.org
+
+4storeはスケーラブルで安定したRDFデータベースです。15Gトリプル、数千人のユーザがいるアプリケーションで利用された実績があります。
+
+* OWLIM | Ontotext
+    * http://www.ontotext.com/owlim
+
+Ontotext社が出しているストレージです。高速な推論エンジンを有しており、スケーラビリティにも優れています。
+
+* AllegroGraph RDFStore Web 3.0's Database
+    * http://www.franz.com/agraph/allegrograph/
+
+Franz社が開発しているRDFストレージ。高速に動作するようです。無償版およびアーキテクチャについては以下に説明があります。
+
+* Franz Inc: Semantic Technologies Downloads
+    * http://www.franz.com/agraph/downloads/
+
+基本的にはOWLIMと同様にSesameのようなHTTP(REST)ラッパーが用意されており、ラッパー経由でストレージを利用する形になっています。
+
+* TDB - A SPARQL Database for Jena
+    * http://openjena.org/TDB/
+
+* SDB - A SPARQL Database for Jena
+    * http://openjena.org/SDB/
+
+TDBとSDBはJenaの利用を前提としたRDFストレージです。TDBは軽量のストレージで、20Mトリプル程度までならある程度非常に高速に動作します。SDBはロードバランシング、セキュリティ、クラスタリング、バックアップそして管理のための機能があります。可用性という面ではSDB, 手軽にストレージを利用したい場合にはTDBという選択になるでしょう。RDFの挿入や更新があるアプリケーションの場合にはSDBを利用したほうが良いです。
+
+* cumulusrdf - RDF Storage in the Cloud - Google Project Hosting
+    * http://code.google.com/p/cumulusrdf/
+
+Cumulusはクラウドベースのアーキテクチャに置かれることを想定されたRDFストアです。CumulusはRESTベースのAPIを通じて、RDFデータのCRUD(作成、検索、更新、削除)を行うことができます。ストレージのバックエンドとして[Apache Cassandora](http://cassandra.apache.org/)を利用しています。
+
+Apache Cassandoraの利用によってスケーラビリティと高可用性をパフォーマンスを失うことなく実現することができます。並列処理によって線形にスケールさせることができますし、RDFストレージは今後このような方向に進んでいくと考えられます。
+
+* SHARD
+    * http://www.dist-systems.bbn.com/people/krohloff/shard.shtml
+
+HADOOP上に構築されたRDFストア
+
+* 参考: How Raytheon BBN Technologies Researchers are Using Hadoop to Build a Scalable, Distributed Triple Store
+    * http://www.cloudera.com/blog/2010/03/how-raytheon-researchers-are-using-hadoop-to-build-a-scalable-distributed-triple-store/
