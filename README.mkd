@@ -211,18 +211,47 @@ jena-tdb-0.9.0-incubating-distribution.zipをダウンロードして解凍し�
     $ tdbloader --loc=tutorial2 tutorial2.rdf
     -- Start triples data phase
     ** Load empty triples table
-    Load: tutorial2.rdf -- 2012/03/23 12:52:32 JST
+    Load: tutorial2.rdf -- 2012/03/23 14:21:59 JST
     -- Finish triples data phase
-    34 triples loaded in 0.12 seconds [Rate: 283.33 per second]
+    40 triples loaded in 0.11 seconds [Rate: 363.64 per second]
     -- Start triples index phase
-    ** Index SPO->POS: 34 slots indexed in 0.00 seconds [Rate: 8,500.00 per second]
-    ** Index SPO->OSP: 34 slots indexed in 0.00 seconds [Rate: 17,000.00 per second]
+    ** Index SPO->POS: 40 slots indexed in 0.00 seconds [Rate: 10,000.00 per second]
+    ** Index SPO->OSP: 40 slots indexed in 0.00 seconds [Rate: 13,333.33 per second]
     -- Finish triples index phase
-    ** 34 triples indexed in 0.01 seconds [Rate: 4,250.00 per second]
+    ** 40 triples indexed in 0.01 seconds [Rate: 5,000.00 per second]
     -- Finish triples load
-    ** Completed: 34 triples loaded in 0.14 seconds [Rate: 242.86 per second]
+    ** Completed: 40 triples loaded in 0.13 seconds [Rate: 312.50 per second]
 
-無事挿入することが出来ました。試しにクエリを投げてみましょう。
+無事挿入することが出来ました。試しにクエリを投げてみましょう。今回はSPARQLを別ファイルに保存して実行することにしましょう。
+
+実行している[SPARQL](http://www.w3.org/TR/rdf-sparql-query/)は以下のとおりです。
+
+    PREFIX tutorial2: <http://www.yamaguti.comp.ae.keio.ac.jp/tutorial2#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+    SELECT ?student
+    WHERE {
+        ?student rdf:type tutorial2:Student.
+    }
+
+以下のようにしてSPARQLを実行することができます。
+
+    $ tdbquery --loc=tutorial2 --file=tutorial2_1.rq
+    ------------------------
+    | student              |
+    ========================
+    | tutorial2:Kagawa     |
+    | tutorial2:Matsushita |
+    | tutorial2:Suzuki     |
+    | tutorial2:Tagawa     |
+    | tutorial2:Tamagawa   |
+    | tutorial2:Tanaka     |
+    | tutorial2:Wang       |
+    ------------------------
+
+このクエリでは生徒の一覧を取得しました。想定通りの結果が得られました。ではこのデータベースに生徒のデータを追加してみます。これもSPARQLを利用して行うことができます。
+
+SPARQLを利用したデータ更新及び挿入についてはW3Cの[SPARQL-Update](http://www.w3.org/Submission/SPARQL-Update/)に仕様が詳しく記載されています。
 
 
 ### このチュートリアルで説明していないこと

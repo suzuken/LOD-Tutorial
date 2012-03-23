@@ -1,0 +1,4 @@
+PREFIX tutorial2: <http://www.yamaguti.comp.ae.keio.ac.jp/tutorial2#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+INSERT DATA { tutorial2:Satoh rdf:type tutorial2:Student. }
