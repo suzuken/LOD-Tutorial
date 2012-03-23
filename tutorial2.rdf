@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.yamaguti.ae.keio.ac.jp/tutorial2#"
+     xml:base="http://www.yamaguti.ae.keio.ac.jp/tutorial2"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    <owl:Ontology rdf:about="http://www.yamaguti.ae.keio.ac.jp/tutorial2"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#commute -->
+
+    <owl:ObjectProperty rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#commute"/>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#hasCampus -->
+
+    <owl:ObjectProperty rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#hasCampus"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#People -->
+
+    <owl:Class rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#People"/>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Place -->
+
+    <owl:Class rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Place"/>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Professor -->
+
+    <owl:Class rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Professor">
+        <rdfs:subClassOf rdf:resource="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#People"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Student -->
+
+    <owl:Class rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Student">
+        <rdfs:subClassOf rdf:resource="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#People"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#University -->
+
+    <owl:Class rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#University"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Hiyoshi -->
+
+    <owl:NamedIndividual rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Hiyoshi">
+        <rdf:type rdf:resource="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Place"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Hoshina -->
+
+    <owl:NamedIndividual rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Hoshina">
+        <rdf:type rdf:resource="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Student"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Ishikawa -->
+
+    <owl:NamedIndividual rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Ishikawa">
+        <rdf:type rdf:resource="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Student"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#KeioUniversity -->
+
+    <owl:NamedIndividual rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#KeioUniversity">
+        <rdf:type rdf:resource="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#University"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Kobayashi -->
+
+    <owl:NamedIndividual rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Kobayashi">
+        <rdf:type rdf:resource="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Student"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Mita -->
+
+    <owl:NamedIndividual rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Mita">
+        <rdf:type rdf:resource="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Place"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Suzuki -->
+
+    <owl:NamedIndividual rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Suzuki">
+        <rdf:type rdf:resource="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Student"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Tokorozawa -->
+
+    <owl:NamedIndividual rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Tokorozawa">
+        <rdf:type rdf:resource="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Place"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Waseda -->
+
+    <owl:NamedIndividual rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Waseda">
+        <rdf:type rdf:resource="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Place"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#WasedaUniversity -->
+
+    <owl:NamedIndividual rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#WasedaUniversity">
+        <rdf:type rdf:resource="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#University"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Yagami -->
+
+    <owl:NamedIndividual rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Yagami">
+        <rdf:type rdf:resource="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Place"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Yamaguchi -->
+
+    <owl:NamedIndividual rdf:about="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Yamaguchi">
+        <rdf:type rdf:resource="http://www.yamaguti.comp.ae.keio.ac.jp/xbrl_ontology/owl#Professor"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.2.5.1928) http://owlapi.sourceforge.net -->
+
