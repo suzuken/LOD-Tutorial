@@ -178,21 +178,35 @@ jena-tdb-0.9.0-incubating-distribution.zipをダウンロードして解凍し�
 
 1つ目のチュートリアルではTDBの導入と、簡単なデータの挿入を試しました。では、より実践に近い形でTDBを利用していきましょう。
 
-新しく別のデータベースを作成することにします。今回は[Protege][http://protege.stanford.edu/]を利用して素となるRDFを作成してみます。今回のチュートリアル用に作成したオントロジーの仕様は以下のとおりです。
+新しく別のデータベースを作成することにします。今回は[Protege](http://protege.stanford.edu/)を利用して素となるRDFを作成してみます。今回のチュートリアル用に作成したオントロジーの仕様は以下のとおりです。
 
 * ベースとなる名前空間URI: http://www.yamaguti.ae.keio.ac.jp/tutorial2#
 * クラスとして大学、生徒、教授、場所を作成
 * それらのインスタンスを適宜作成
 * プロパティとして、通う、キャンパスを持っている、を作成
 
+まず、クラス階層を作成します。Classesタブから以下のように作成しました。
 
 ![scs1](http://github.com/suzuken/LOD-Tutorial/raw/master/images/1.png)
+
+
+次にプロパティを作成します。Object Propertiesから作成していきます。
+
 ![scs2](http://github.com/suzuken/LOD-Tutorial/raw/master/images/2.png)
+
+次にインスタンスについて作成していきましょう。インスタンスについてはIndivisualsタブから作成できます。ここではPlaceに日吉や矢上などの実際の場所のインスタンスを作成しておきました。実際の生徒に関するインスタンスや大学についてなどもここで作成しておきましょう。
+
 ![scs3](http://github.com/suzuken/LOD-Tutorial/raw/master/images/3.png)
+
+作成したクラスとプロパティはEntitiesタブから一覧できます。
+
 ![scs4](http://github.com/suzuken/LOD-Tutorial/raw/master/images/4.png)
+
+では作成したオントロジーをRDFとして出力しましょう。File->Save AsからRDF/XMLを選択し、保存します。
+
 ![scs5](http://github.com/suzuken/LOD-Tutorial/raw/master/images/5.png)
 
-作成されたRDFは[tutorial2][tutorial2.rdf]からダウンロードできます。ではこれをtdbを利用して読み込み、新しいデータベースに挿入してみましょう。
+これでRDFを出力することができました。作成されたRDFは[tutorial2](tutorial2.rdf)からダウンロードできます。ではこれをtdbを利用して読み込み、新しいデータベースに挿入してみましょう。
 
     $ tdbloader --loc=tutorial2 tutorial2.rdf
     -- Start triples data phase
